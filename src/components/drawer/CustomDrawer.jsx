@@ -14,7 +14,7 @@ export default function CustomDrawer({ onLogout, onNavigate }) {
   const handleNavigation = (route) => {
     if (route) {
       router.push(route);
-      if (onNavigate) {
+      if (onNavigate) { 
         onNavigate();
       }
     }
@@ -44,7 +44,7 @@ export default function CustomDrawer({ onLogout, onNavigate }) {
 
     Animated.timing(animatedHeights[index], {
       toValue: isOpen ? 0 : 1,
-      duration: 300,
+      duration: 100,
       useNativeDriver: false,
     }).start();
 
