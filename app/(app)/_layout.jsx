@@ -8,7 +8,7 @@ import { useDrawer } from '../../src/context/DrawerContext';
 export default function AppLayout() {
   const { drawerOpen, openDrawer, closeDrawer } = useDrawer();
   const [modalVisible, setModalVisible] = React.useState(false);
-  const slideAnim = useRef(new Animated.Value(-320)).current; // Empieza fuera de la pantalla (izquierda)
+  const slideAnim = useRef(new Animated.Value(-320)).current; 
 
   useEffect(() => {
     if (drawerOpen) { setModalVisible(true);
@@ -84,7 +84,6 @@ export default function AppLayout() {
                 <CustomDrawer
                   onLogout={() => {
                     closeDrawer();
-                    // La navegación se manejará en CustomDrawer
                   }}
                   onNavigate={closeDrawer}
                 />
