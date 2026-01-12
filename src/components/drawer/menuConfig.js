@@ -1,7 +1,19 @@
 export const menuItems = [
   {
-    label: "Actividades",
+    label: "Inicio",
+    icon: "home-outline",
+    route: "/",
+    subMenu: [],
+  },
+  {
+    label: "Cursos",
     icon: "book-outline",
+    route: "/cursos",
+    subMenu: [],
+  },
+  {
+    label: "Actividades",
+    icon: "list-outline",
     route: null,
     subMenu: [
       { label: "Tareas", route: "/actividades/tareas" },
@@ -9,18 +21,9 @@ export const menuItems = [
     ],
   },
   {
-    label: "Calendario",
-    icon: "calendar-outline",
-    route: "/calendario",
-    subMenu: [],
-  },
-  {
-    label: "Seguridad",
+    label: "Ajustes",
     icon: "settings-outline",
-    route: null,
-    subMenu: [
-      { label: "Gestión de usuarios", route: "/seguridad/usuarios" },
-      { label: "Gestión de roles", route: "/seguridad/roles" },
-    ],
+    route: "/ajustes",
+    subMenu: [],
   },
 ];
