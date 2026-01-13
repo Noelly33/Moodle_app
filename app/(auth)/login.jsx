@@ -65,7 +65,7 @@ export default function Login() {
             {/* Login Form */}
             <View className="mb-6">
               {/* Email Input */}
-              <View className="mb-4">
+              {/* <View className="mb-4">
                 <Text className="text-sm font-medium text-gray-700 mb-3">
                   Correo electrónico
                 </Text>
@@ -79,7 +79,7 @@ export default function Login() {
                     autoComplete="email"
                   />
                 </View>
-              </View>
+              </View> */}
 
               {/* Password Input */}
               {/* <View className="mb-4">
@@ -109,7 +109,7 @@ export default function Login() {
               </TouchableOpacity> */}
 
               {/* Login Button */}
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 className="bg-blue-600 rounded-lg py-4 items-center justify-center mb-4"
                 activeOpacity={0.8}
                 onPress={handleLogin}
@@ -117,15 +117,15 @@ export default function Login() {
                 <Text className="text-white text-base font-semibold">
                   Iniciar sesión
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
 
             {/* Divider */}
-            <View className="flex-row items-center my-6">
+            {/* <View className="flex-row items-center my-6">
               <View className="flex-1" style={{ height: 1, backgroundColor: '#D1D5DB' }} />
               <Text className="mx-4 text-sm text-gray-500">o</Text>
               <View className="flex-1" style={{ height: 1, backgroundColor: '#D1D5DB' }} />
-            </View>
+            </View> */}
             <TouchableOpacity
               onPress={handleGoogleLogin}
               className="rounded-lg py-4 px-4 flex-row items-center justify-center bg-white mb-6"
