@@ -109,7 +109,7 @@ export default function Login() {
               </TouchableOpacity> */}
 
               {/* Login Button */}
-              {/* <TouchableOpacity
+              <TouchableOpacity
                 className="bg-blue-600 rounded-lg py-4 items-center justify-center mb-4"
                 activeOpacity={0.8}
                 onPress={handleLogin}
@@ -117,7 +117,7 @@ export default function Login() {
                 <Text className="text-white text-base font-semibold">
                   Iniciar sesión
                 </Text>
-              </TouchableOpacity> */}
+              </TouchableOpacity>
             </View>
 
             {/* Divider */}
