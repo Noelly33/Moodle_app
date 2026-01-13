@@ -8,7 +8,7 @@ import { useDrawer } from '../../src/context/DrawerContext';
 export default function AppLayout() {
   const { drawerOpen, openDrawer, closeDrawer } = useDrawer();
   const [modalVisible, setModalVisible] = React.useState(false);
-  const slideAnim = useRef(new Animated.Value(-320)).current; // Empieza fuera de la pantalla (izquierda)
+  const slideAnim = useRef(new Animated.Value(-320)).current; 
 
   useEffect(() => {
     if (drawerOpen) { setModalVisible(true);
@@ -35,7 +35,8 @@ export default function AppLayout() {
           headerShown: true,
           headerLeft: () => (
             <TouchableOpacity
-              onPress={openDrawer}
+              onPress={() => openDrawer?.()}
+              hitSlop={12}
               style={{ marginLeft: 16 }}
             >
               <Ionicons name="menu" size={28} color="#1F2937" />
@@ -53,6 +54,18 @@ export default function AppLayout() {
         <Stack.Screen 
           name="index" 
           options={{ title: 'Moodle App' }}
+        /> 
+        <Stack.Screen 
+          name="cursos" 
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="tarea" 
+          options={{ headerShown: false }}    
+        />
+        <Stack.Screen 
+          name="foro" 
+          options={{ headerShown: false }}    
         />
       </Stack>
 
@@ -84,7 +97,6 @@ export default function AppLayout() {
                 <CustomDrawer
                   onLogout={() => {
                     closeDrawer();
-                    // La navegación se manejará en CustomDrawer
                   }}
                   onNavigate={closeDrawer}
                 />

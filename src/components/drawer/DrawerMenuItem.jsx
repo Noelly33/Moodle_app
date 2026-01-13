@@ -15,22 +15,10 @@ export default function DrawerMenuItem({
 
   return (
     <View>
-      {/* ITEM PRINCIPAL */}
       <Pressable onPress={onPress} style={styles.menuItem}>
-        {/* Icono */}
-        {item.icon && (
-          <Ionicons
-            name={item.icon}
-            size={20}
-            color="#ffffff"
-            style={styles.icon}
-          />
-        )}
-
-        {/* Texto */}
+        {item.icon && ( <Ionicons name={item.icon} size={20} color="#ffffff" style={styles.icon}/>)}
         <Text style={styles.label}>{item.label}</Text>
 
-        {/* Flecha animada */}
         {hasSubMenu && (
           <Animated.View
             style={{
@@ -50,7 +38,6 @@ export default function DrawerMenuItem({
         )}
       </Pressable>
 
-      {/* SUBMENÚ */}
       {hasSubMenu && (
         <Animated.View
           style={[
@@ -82,7 +69,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 14,
     paddingHorizontal: 20,
-    backgroundColor: '#1e293b', // azul oscuro tipo Moodle
+    backgroundColor: '#1e293b', 
   },
   icon: {
     marginRight: 12,
