@@ -16,8 +16,8 @@ export const menuItems = [
     icon: "list-outline",
     route: null,
     subMenu: [
-      { label: "Tareas", route: "/actividades/tareas" },
-      { label: "Foros", route: "/actividades/foros" },
+      { label: "Tareas", route: "/tarea" },
+      { label: "Foros", route: "/foro" },
     ],
   },
   {
