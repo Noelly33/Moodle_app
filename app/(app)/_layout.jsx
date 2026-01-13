@@ -35,7 +35,8 @@ export default function AppLayout() {
           headerShown: true,
           headerLeft: () => (
             <TouchableOpacity
-              onPress={openDrawer}
+              onPress={() => openDrawer?.()}
+              hitSlop={12}
               style={{ marginLeft: 16 }}
             >
               <Ionicons name="menu" size={28} color="#1F2937" />
@@ -53,6 +54,18 @@ export default function AppLayout() {
         <Stack.Screen 
           name="index" 
           options={{ title: 'Moodle App' }}
+        /> 
+        <Stack.Screen 
+          name="cursos" 
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen 
+          name="tarea" 
+          options={{ headerShown: false }}    
+        />
+        <Stack.Screen 
+          name="foro" 
+          options={{ headerShown: false }}    
         />
       </Stack>
 

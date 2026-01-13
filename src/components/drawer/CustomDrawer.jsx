@@ -87,10 +87,8 @@ export default function CustomDrawer({ onLogout, onNavigate }) {
       </ScrollView>
 
       {/* Botón cerrar sesión */}
-      {/* <View style={{ padding: 16 }}>
-        <Button 
-          color="danger" 
-          onPress={() => {
+      <View style={{ padding: 16 }}>
+        <Button color="danger"  onPress={() => {
             if (onLogout) {
               onLogout();
             } else {
@@ -100,7 +98,7 @@ export default function CustomDrawer({ onLogout, onNavigate }) {
         >
           Cerrar sesión
         </Button>
-      </View> */}
+      </View>
     </View>
   );
 }
