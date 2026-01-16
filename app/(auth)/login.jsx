@@ -64,68 +64,9 @@ export default function Login() {
 
             {/* Login Form */}
             <View className="mb-6">
-              {/* Email Input */}
-              {/* <View className="mb-4">
-                <Text className="text-sm font-medium text-gray-700 mb-3">
-                  Correo electrónico
-                </Text>
-                <View className="rounded-lg bg-gray-50" style={{ borderWidth: 1, borderColor: '#D1D5DB' }} >
-                  <TextInput
-                    className="px-4 py-3 text-base text-gray-900"
-                    placeholder="nombre@ejemplo.com"
-                    placeholderTextColor="#9CA3AF"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                  />
-                </View>
-              </View> */}
-
-              {/* Password Input */}
-              {/* <View className="mb-4">
-                <Text className="text-sm font-medium text-gray-700 mb-2">
-                  Contraseña
-                </Text>
-                <View 
-                  className="rounded-lg bg-gray-50"
-                  style={{ borderWidth: 1, borderColor: '#D1D5DB' }}
-                >
-                  <TextInput
-                    className="px-4 py-3 text-base text-gray-900"
-                    placeholder="••••••••"
-                    placeholderTextColor="#9CA3AF"
-                    secureTextEntry
-                    autoCapitalize="none"
-                    autoComplete="password"
-                  />
-                </View>
-              </View> */}
-
-              {/* Forgot Password Link */}
-              {/* <TouchableOpacity className="self-end mb-6">
-                <Text className="text-sm text-blue-600 font-medium">
-                  ¿Olvidaste tu contraseña?
-                </Text>
-              </TouchableOpacity> */}
-
               {/* Login Button */}
-              <TouchableOpacity
-                className="bg-blue-600 rounded-lg py-4 items-center justify-center mb-4"
-                activeOpacity={0.8}
-                onPress={handleLogin}
-              >
-                <Text className="text-white text-base font-semibold">
-                  Iniciar sesión
-                </Text>
-              </TouchableOpacity>
             </View>
 
-            {/* Divider */}
-            {/* <View className="flex-row items-center my-6">
-              <View className="flex-1" style={{ height: 1, backgroundColor: '#D1D5DB' }} />
-              <Text className="mx-4 text-sm text-gray-500">o</Text>
-              <View className="flex-1" style={{ height: 1, backgroundColor: '#D1D5DB' }} />
-            </View> */}
             <TouchableOpacity
               className="rounded-lg py-4 px-4 flex-row items-center justify-center bg-white"
               style={{ borderWidth: 1, borderColor: '#D1D5DB' }}

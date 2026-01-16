@@ -10,7 +10,6 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "moodleapp",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -26,7 +25,8 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "scheme": "moodleapp"
+      "scheme": "moodleapp",
+      "package": "com.abrahamfarfan.moodleapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
