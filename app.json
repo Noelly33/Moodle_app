@@ -3,11 +3,14 @@
     "name": "moodle-app",
     "slug": "moodle-app",
     "version": "1.0.0",
+    "extra": {
+      "WEB_GOOGLE_CLIENT_ID": "55834161002-cbtkln3dqmons6putuj89ep35qb6dhtv.apps.googleusercontent.com",
+      "ANDROID_GOOGLE_CLIENT_ID": "55834161002-r1j39mhpiqtb2umq3r26sjpu5h75boqn.apps.googleusercontent.com"
+    },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "scheme": "moodleapp",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -22,13 +25,17 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "scheme": "moodleapp"
+      "scheme": "moodleapp",
+      "package": "com.abrahamfarfan.moodleapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-web-browser",
+      "@react-native-google-signin/google-signin",
+      "expo-secure-store"
     ]
   }
 }

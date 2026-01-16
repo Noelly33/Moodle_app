@@ -1,29 +1,36 @@
 import { View, Text, ScrollView, Animated } from 'react-native';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'expo-router';
 import { menuItems } from './menuConfig';
 import DrawerMenuItem from './DrawerMenuItem';
 import LogoIndex from '../LogoIndex';
 import Button from '../ui/Button';
+import { useAuth } from '../../context/authContext';
+import { googleLogout } from '../../hooks/useGoogleLogout';
+import { useRouter } from 'expo-router';
 
-export default function CustomDrawer({ onLogout, onNavigate }) {
+export default function CustomDrawer({ onNavigate }) {
   const menu = menuItems;
   const loading = false;
   const router = useRouter();
+  const { signOut } = useAuth();
 
   const handleNavigation = (route) => {
     if (route) {
       router.push(route);
-      if (onNavigate) { 
-        onNavigate();
-      }
+      if (onNavigate) onNavigate();
     }
+  };
+
+  const handleLogout = async () => {
+    if (onNavigate) onNavigate();   // cierra el drawer
+    await googleLogout();           // cierra sesión Google (opcional)
+    await signOut();                // elimina JWT + limpia contexto
+    router.replace('/(auth)/login');
   };
 
   const [expandedMenus, setExpandedMenus] = useState({});
   const [animatedHeights, setAnimatedHeights] = useState({});
 
-  // Inicializar animaciones cuando llega el menú
   useEffect(() => {
     if (menu && menu.length > 0) {
       const expanded = {};
@@ -63,7 +70,9 @@ export default function CustomDrawer({ onLogout, onNavigate }) {
 
       <ScrollView>
         {loading ? (
-          <Text style={{ textAlign: 'center', padding: 20, color: '#6B7280' }}>Cargando menú...</Text>
+          <Text style={{ textAlign: 'center', padding: 20, color: '#6B7280' }}>
+            Cargando menú...
+          </Text>
         ) : (
           menu && menu.length > 0 ? (
             menu.map((item, index) => (
@@ -81,21 +90,16 @@ export default function CustomDrawer({ onLogout, onNavigate }) {
               />
             ))
           ) : (
-            <Text style={{ textAlign: 'center', padding: 20, color: '#6B7280' }}>No hay elementos en el menú</Text>
+            <Text style={{ textAlign: 'center', padding: 20, color: '#6B7280' }}>
+              No hay elementos en el menú
+            </Text>
           )
         )}
       </ScrollView>
 
       {/* Botón cerrar sesión */}
       <View style={{ padding: 16 }}>
-        <Button color="danger"  onPress={() => {
-            if (onLogout) {
-              onLogout();
-            } else {
-              router.replace('/(auth)/login');
-            }
-          }}
-        >
+        <Button color="danger" onPress={handleLogout}>
           Cerrar sesión
         </Button>
       </View>

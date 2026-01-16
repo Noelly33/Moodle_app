@@ -1,45 +1,35 @@
-import { View, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, ScrollView, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import Svg, { G, Path } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 import LogoIndex from '../../src/components/LogoIndex';
+import { useGoogleAuth } from '../../src/hooks/useGoogleAuth';
 import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
-import { useEffect } from 'react';
+import { router } from 'expo-router';
+import { useAuth } from '../../src/context/authContext';
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function Login() {
-  const router = useRouter();
+  const { signIn: saveSession } = useAuth();
+    const { signIn } = useGoogleAuth(async ({ idToken }) => {
+    const res = await fetch('http://10.0.2.2:3000/api/auth/login/google', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+    });
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: 'TU_ANDROID_CLIENT_ID.apps.googleusercontent.com',
-    iosClientId: 'TU_IOS_CLIENT_ID.apps.googleusercontent.com',
-    webClientId: 'TU_WEB_CLIENT_ID.apps.googleusercontent.com',
-  });
+    const data = await res.json();
 
-  useEffect(() => {
-    if (response?.type === 'success') {
-      const { authentication } = response;
-      // Autenticación exitosa, redirigir al menú principal
-      console.log('Google authentication successful:', authentication);
-      router.push('/(app)');
+    if (!data.ok) {
+      alert(data.message);
+      return;
     }
-  }, [response]);
 
-  const handleLogin = () => {
-    // Navegar a la pantalla principal
+    await saveSession(data.token);
+
     router.push('/(app)');
-  };
-
-  const handleGoogleLogin = async () => {
-    try {
-      // Abrir Google en el navegador para ambas plataformas
-      await Linking.openURL('https://accounts.google.com/');
-    } catch (error) {
-      console.error('Error en Google login:', error);
-    }
-  };
+  });
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -64,70 +54,11 @@ export default function Login() {
 
             {/* Login Form */}
             <View className="mb-6">
-              {/* Email Input */}
-              {/* <View className="mb-4">
-                <Text className="text-sm font-medium text-gray-700 mb-3">
-                  Correo electrónico
-                </Text>
-                <View className="rounded-lg bg-gray-50" style={{ borderWidth: 1, borderColor: '#D1D5DB' }} >
-                  <TextInput
-                    className="px-4 py-3 text-base text-gray-900"
-                    placeholder="nombre@ejemplo.com"
-                    placeholderTextColor="#9CA3AF"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoComplete="email"
-                  />
-                </View>
-              </View> */}
-
-              {/* Password Input */}
-              {/* <View className="mb-4">
-                <Text className="text-sm font-medium text-gray-700 mb-2">
-                  Contraseña
-                </Text>
-                <View 
-                  className="rounded-lg bg-gray-50"
-                  style={{ borderWidth: 1, borderColor: '#D1D5DB' }}
-                >
-                  <TextInput
-                    className="px-4 py-3 text-base text-gray-900"
-                    placeholder="••••••••"
-                    placeholderTextColor="#9CA3AF"
-                    secureTextEntry
-                    autoCapitalize="none"
-                    autoComplete="password"
-                  />
-                </View>
-              </View> */}
-
-              {/* Forgot Password Link */}
-              {/* <TouchableOpacity className="self-end mb-6">
-                <Text className="text-sm text-blue-600 font-medium">
-                  ¿Olvidaste tu contraseña?
-                </Text>
-              </TouchableOpacity> */}
-
               {/* Login Button */}
-              <TouchableOpacity
-                className="bg-blue-600 rounded-lg py-4 items-center justify-center mb-4"
-                activeOpacity={0.8}
-                onPress={handleLogin}
-              >
-                <Text className="text-white text-base font-semibold">
-                  Iniciar sesión
-                </Text>
-              </TouchableOpacity>
             </View>
 
-            {/* Divider */}
-            {/* <View className="flex-row items-center my-6">
-              <View className="flex-1" style={{ height: 1, backgroundColor: '#D1D5DB' }} />
-              <Text className="mx-4 text-sm text-gray-500">o</Text>
-              <View className="flex-1" style={{ height: 1, backgroundColor: '#D1D5DB' }} />
-            </View> */}
             <TouchableOpacity
-              onPress={handleGoogleLogin}
+              onPress={signIn}
               className="rounded-lg py-4 px-4 flex-row items-center justify-center bg-white mb-6"
               style={{ borderWidth: 1, borderColor: '#D1D5DB' }}
               activeOpacity={0.8}
@@ -146,17 +77,6 @@ export default function Login() {
               </Text>
             </TouchableOpacity>
 
-            {/* Sign Up Link */}
-            {/* <View className="flex-row justify-center items-center mt-6">
-              <Text className="text-gray-600 text-sm">
-                ¿No tienes una cuenta?
-              </Text>
-              <TouchableOpacity>
-                <Text className="text-blue-600 text-sm font-medium">
-                  Regístrate
-                </Text>
-              </TouchableOpacity>
-            </View> */}
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
