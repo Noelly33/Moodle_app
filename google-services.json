@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "543019250128",
+    "project_id": "proyecto-movil-f912e",
+    "storage_bucket": "proyecto-movil-f912e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543019250128:android:914034d8182a3c5d8f49d5",
+        "android_client_info": {
+          "package_name": "com.abrahamfarfan.moodleapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD57r84T1NiGglNOYOTyNVM6RwcG6t_7C8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

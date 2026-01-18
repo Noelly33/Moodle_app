@@ -12,7 +12,8 @@ WebBrowser.maybeCompleteAuthSession();
 export default function Login() {
   const { signIn: saveSession } = useAuth();
     const { signIn } = useGoogleAuth(async ({ idToken }) => {
-    const res = await fetch('http://10.0.2.2:3000/api/auth/login/google', {
+      //10.0.2.2
+    const res = await fetch('http://192.168.100.133:3000/api/auth/login/google', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${idToken}`,
