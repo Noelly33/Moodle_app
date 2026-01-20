@@ -8,17 +8,9 @@ export async function registerForPushNotifications() {
     return null;
   }
 
-  const { status: existingStatus } =
-    await Notifications.getPermissionsAsync();
+  const permission =  await Notifications.requestPermissionsAsync();
 
-  let finalStatus = existingStatus;
-
-  if (existingStatus !== 'granted') {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
-  }
-
-  if (finalStatus !== 'granted') {
+  if (permission.status !== 'granted') {
     alert('Permiso de notificaciones denegado');
     return null;
   }
@@ -26,12 +18,11 @@ export async function registerForPushNotifications() {
   const token = (await Notifications.getExpoPushTokenAsync()).data;
 
   if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
+    await Notifications.setNotificationChannelAsync('default', {
       name: 'default',
       importance: Notifications.AndroidImportance.MAX,
     });
   }
 
-  console.log(token);
   return token;
 }

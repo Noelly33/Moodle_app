@@ -12,7 +12,7 @@ export default function CustomDrawer({ onNavigate }) {
   const menu = menuItems;
   const loading = false;
   const router = useRouter();
-  const { signOut } = useAuth();
+  const { signOut, token } = useAuth();
 
   const handleNavigation = (route) => {
     if (route) {
@@ -22,9 +22,20 @@ export default function CustomDrawer({ onNavigate }) {
   };
 
   const handleLogout = async () => {
-    if (onNavigate) onNavigate();   // cierra el drawer
-    await googleLogout();           // cierra sesión Google (opcional)
-    await signOut();                // elimina JWT + limpia contexto
+    try {
+      await fetch('http://192.168.100.133:3000/api/notifications/logout-push', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (e) {
+      console.log('No se pudo enviar push de logout');
+    }
+
+    if (onNavigate) onNavigate();
+    await googleLogout();
+    await signOut();
     router.replace('/(auth)/login');
   };
 
