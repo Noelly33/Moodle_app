@@ -5,7 +5,10 @@
     "version": "1.0.0",
     "extra": {
       "WEB_GOOGLE_CLIENT_ID": "55834161002-cbtkln3dqmons6putuj89ep35qb6dhtv.apps.googleusercontent.com",
-      "ANDROID_GOOGLE_CLIENT_ID": "55834161002-r1j39mhpiqtb2umq3r26sjpu5h75boqn.apps.googleusercontent.com"
+      "ANDROID_GOOGLE_CLIENT_ID": "55834161002-r1j39mhpiqtb2umq3r26sjpu5h75boqn.apps.googleusercontent.com",
+      "eas": {
+        "projectId": "ced13033-f0b8-4f8b-9a8d-188373e4978c"
+      }
     },
     "orientation": "portrait",
     "icon": "./assets/icon.png",
