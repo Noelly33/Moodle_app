@@ -30,7 +30,7 @@ export default function CustomDrawer({ onNavigate }) {
         },
       });
     } catch (e) {
-      console.log('No se pudo enviar push de logout');
+      console.log('No se pudo enviar push de logout', e);
     }
 
     if (onNavigate) onNavigate();
