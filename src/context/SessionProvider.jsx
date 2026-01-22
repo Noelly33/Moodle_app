@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import { getSession, signIn, signOut } from "../services/auth";
+import { getSession, signIn, signOut } from "../repository/auth";
 
 export const AuthContext = createContext(null);
 
