@@ -2,35 +2,38 @@ import { Text, FlatList, Pressable, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 import { router } from "expo-router";
 import { useAuth } from "../../../src/context/authContext";
+import { getCoursesService } from "../../../src/service/course";
 
 export default function Cursos() {
   const { token } = useAuth();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchCourses = async () => {
-    try {
-      const res = await fetch("http://192.168.100.133:3000/api/courses", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await res.json();
-      setCourses(data);
-    } catch (error) {
-      console.log("Error cargando cursos", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchCourses();
+    async function loadCourses() {
+      try {
+        const data = await getCoursesService(token);
+        setCourses(data);
+      } catch (error) {
+        console.log("Error cargando cursos", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadCourses();
   }, []);
 
   if (loading) {
     return <ActivityIndicator style={{ marginTop: 40 }} />;
+  }
+
+  if (!courses || courses.length === 0) {
+    return (
+      <Text style={{ textAlign: "center", marginTop: 40, color: "#6B7280" }}>
+        No hay cursos disponibles
+      </Text>
+    );
   }
 
   return (
