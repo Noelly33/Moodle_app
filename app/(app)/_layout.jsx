@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import CustomDrawer from '../../src/components/drawer/CustomDrawer';
 import { useDrawer } from '../../src/context/DrawerContext';
 import { useAuth } from '../../src/context/authContext';
-import { registerForPushNotifications } from '../../src/hooks/usePushNotifications';
+import { useRegisterPushToken } from '../../src/hooks/useRegisterPushToken';
 
 export default function AppLayout() {
   const { drawerOpen, openDrawer, closeDrawer } = useDrawer();
@@ -13,33 +13,7 @@ export default function AppLayout() {
   const slideAnim = useRef(new Animated.Value(-320)).current; 
   const { token } = useAuth();
 
-  useEffect(() => {
-    const initPush = async () => {
-      try {
-        if (!token) return;
-
-        const pushToken = await registerForPushNotifications();
-        if (!pushToken) return;
-
-        await fetch('http://192.168.100.133:3000/api/notifications/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            pushToken,
-            platform: Platform.OS,
-          }),
-        });
-
-      } catch (err) {
-        console.log('Error registrando push token', err);
-      }
-    };
-
-    initPush();
-  }, [token]);
+  useRegisterPushToken(token);
 
   useEffect(() => {
     if (drawerOpen) {
