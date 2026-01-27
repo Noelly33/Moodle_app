@@ -8,14 +8,25 @@ export async function getCoursesService(token: string) {
   if (online) {
     try {
       const courses = await getCoursesApi(token);
-      await saveCourses(courses); 
-      return courses;
+      await saveCourses(courses);
+
+      return {
+        courses,
+        offline: false,
+      };
     } catch (err) {
-      console.log('Sin conexión, usando cursos locales');
-      return await getCourses();
+      console.log('Sin conexión real, usando cursos locales', err);
+      return {
+        courses: await getCourses(),
+        offline: true,
+      };
     }
   } else {
-    console.log('Modo offline');
-    return await getCourses();
+    console.log('Modo offline (sin red)');
+    return {
+      courses: await getCourses(),
+      offline: true,
+    };
   }
 }
+
