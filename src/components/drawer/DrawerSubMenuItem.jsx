@@ -50,7 +50,7 @@ export default function DrawerSubMenuItem({ item, onNavigate }) {
               ],
             }}
           >
-            <Ionicons name="chevron-down" size={16} color="#1e40af" />
+            <Ionicons name="chevron-down" size={16} color="#5A5C5E" />
           </Animated.View>
         )}
       </Pressable>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   subMenuText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1e3a8a',
+    color: '#5A5C5E',
   },
   subSubMenuItem: {
     paddingVertical: 10,
@@ -102,6 +102,6 @@ const styles = StyleSheet.create({
   },
   subSubMenuText: {
     fontSize: 13,
-    color: '#1e3a8a',
+    color: '#5A5C5E',
   },
 });

@@ -22,6 +22,7 @@ export function useGoogleAuth(
 
       const userInfo = await GoogleSignin.signIn();
       const idToken = userInfo.data?.idToken;
+      console.log(idToken)
 
       if (!idToken) {
         onCancel?.();

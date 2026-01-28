@@ -10,7 +10,7 @@ export default function LayoutCursos() {
     <Stack
       screenOptions={{
         headerShown: true,
-        headerStyle: { backgroundColor: "#172554" },
+        headerStyle: { backgroundColor: "#2160C4" },
         headerTintColor: "#fff",
         headerShadowVisible: false,
       }}

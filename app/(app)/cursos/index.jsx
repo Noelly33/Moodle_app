@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { router } from "expo-router";
 import { useAuth } from "../../../src/context/authContext";
 import { getCoursesService } from "../../../src/service/course";
+import CardCurso from "../../../src/components/ui/CardCurso";
 
 export default function Cursos() {
   const { token } = useAuth();
@@ -42,25 +43,16 @@ export default function Cursos() {
       keyExtractor={(item) => item.id.toString()}
       contentContainerStyle={{ padding: 16 }}
       renderItem={({ item }) => (
-        <Pressable
-          onPress={() => router.push(`/cursos/${item.id}`)}
-          style={{
-            backgroundColor: "#fff",
-            padding: 16,
-            borderRadius: 8,
-            marginBottom: 12,
-            elevation: 2,
-          }}
-        >
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-            {item.name}
-          </Text>
-          <Text style={{ color: "#6B7280" }}>
-            {item.shortname}
-          </Text>
-          <Text style={{ marginTop: 4 }}>
-            Docente: {item.teacher}
-          </Text>
+        <Pressable onPress={() => router.push(`/cursos/${item.id}`)}>
+          <CardCurso
+            data={{
+              nombre: item.name,
+              tipo: item.category || 'Curso',
+              fechaEntrega: item.startdate || '',
+              curso: item.shortname,
+              descripcion: `Docente: ${item.teacher || 'Sin asignar'}`
+            }}
+          />
         </Pressable>
       )}
     />
