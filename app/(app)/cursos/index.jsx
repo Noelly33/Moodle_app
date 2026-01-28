@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { router } from "expo-router";
 import { useAuth } from "../../../src/context/authContext";
 import { getCoursesService } from "../../../src/service/course";
+import CardCurso from "../../../src/components/ui/CardCurso";
 
 export default function Cursos() {
   const { token } = useAuth();

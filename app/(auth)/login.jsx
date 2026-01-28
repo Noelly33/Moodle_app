@@ -31,7 +31,7 @@ export default function Login() {
       setLoading(true);
       const token = await loginWithGoogleService(idToken);
       await saveSession(token);
-      router.replace('/(app)');
+      router.push('/(app)');
     } catch (error) {
       alert('No se pudo iniciar sesión. Intenta nuevamente.');
     } finally {

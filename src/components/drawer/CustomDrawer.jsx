@@ -41,6 +41,7 @@ export default function CustomDrawer({ onNavigate }) {
 
   const [expandedMenus, setExpandedMenus] = useState({});
   const [animatedHeights, setAnimatedHeights] = useState({});
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     if (menu && menu.length > 0) {
@@ -92,11 +93,15 @@ export default function CustomDrawer({ onNavigate }) {
                 item={item}
                 animatedHeight={animatedHeights[index]}
                 isExpanded={expandedMenus[index]}
-                onPress={() =>
-                  item.subMenu && item.subMenu.length > 0
-                    ? toggleSubmenu(index)
-                    : item.route && handleNavigation(item.route)
-                }
+                isSelected={selectedIndex === index}
+                onPress={() => {
+                  if (item.subMenu && item.subMenu.length > 0) {
+                    toggleSubmenu(index);
+                  } else if (item.route) {
+                    handleNavigation(item.route);
+                  }
+                  setSelectedIndex(index);
+                }}
                 onNavigate={onNavigate}
               />
             ))

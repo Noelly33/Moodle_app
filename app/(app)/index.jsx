@@ -1,4 +1,4 @@
-import { View } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import { useEffect, useState } from 'react'
 import { router, Stack } from 'expo-router'
 import Button from '../../src/components/ui/Button'
@@ -67,11 +67,12 @@ export default function Index() {
 
   return (
     <>
-      <Stack.Screen options={{ headerTitle: 'Mis actividades' }} />
-      <View className="bg-gray-50">
-        <Label>Actividades pendientes y en progreso</Label>
-      </View>
-      <ListActividad actividades={selectList} loading={loading} fetchActividades={fetchTareas} />
+      <Stack.Screen options={{ headerTitle: 'Mis actividades',headerShadowVisible: false,
+        }} 
+      />
+      <ScrollView style={{ flex: 1, backgroundColor: "#F9FAFB" }}>
+        <ListActividad actividades={selectList} loading={loading} fetchActividades={fetchTareas} />
+      </ScrollView>
     </>
   )
 }
