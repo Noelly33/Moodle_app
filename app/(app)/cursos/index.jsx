@@ -43,7 +43,10 @@ export default function Cursos() {
       keyExtractor={(item) => item.id.toString()}
       contentContainerStyle={{ padding: 16 }}
       renderItem={({ item }) => (
-        <Pressable onPress={() => router.push(`/cursos/${item.id}`)}>
+        <Pressable onPress={() => router.push({
+          pathname: `/cursos/${item.id}`,
+          params: { courseName: item.name }
+        })}>
           <CardCurso
             data={{
               nombre: item.name,

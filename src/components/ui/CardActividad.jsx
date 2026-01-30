@@ -4,7 +4,6 @@ import { router } from 'expo-router';
 import Bagde from './Bagde';
 
 const CardActividad = ({ data, onDelete }) => {
-    // Badge solo se muestra para tareas pendientes (no entregadas)
     const isPendiente = data?.estado === 'pendiente';
     const badgeText = 'Pendiente';
     const borderColor = '#3B82F6';

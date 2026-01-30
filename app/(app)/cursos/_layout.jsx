@@ -28,7 +28,7 @@ export default function LayoutCursos() {
       />
 
       <Stack.Screen
-        name="[id]"
+        name="[courseid]"
         options={{
           headerTitle: "Detalle del curso",
         }}

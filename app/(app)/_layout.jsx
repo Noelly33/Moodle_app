@@ -21,7 +21,7 @@ export default function AppLayout() {
         const pushToken = await registerForPushNotifications();
         if (!pushToken) return;
 
-        await fetch('http://192.168.100.133:3000/api/notifications/register', {
+        const response = await fetch('http://192.168.100.133:3000/api/notifications/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -33,8 +33,12 @@ export default function AppLayout() {
           }),
         });
 
+        if (!response.ok) {
+          console.warn(`Server error: ${response.status}`);
+        }
+
       } catch (err) {
-        console.log('Error registrando push token', err);
+        console.warn('Error registrando push token (no es crítico):', err.message);
       }
     };
 
