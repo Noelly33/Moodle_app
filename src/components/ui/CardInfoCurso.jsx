@@ -1,18 +1,50 @@
-import { View, Text } from "react-native";
+import { View, Text, useWindowDimensions } from "react-native";
+import RenderHTML from "react-native-render-html";
 
-export default function CardInfoCurso({ title, description }) {
+export default function CardInfoCurso({ title, description, isHtml = false }) {
+  const { width } = useWindowDimensions();
+
   return (
-    <View className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 mb-4 border border-blue-200">
+    <View 
+      style={{ 
+        borderWidth: 1, 
+        borderColor: '#E5E7EB',
+        borderRadius: 12,
+        backgroundColor: '#ffffff',
+        padding: 16,
+        marginBottom: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+      }}
+    >
       {title && (
-        <Text className="text-2xl font-bold text-blue-900 mb-2">
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#1F2937', marginBottom: 8 }}>
           {title}
         </Text>
       )}
-      
       {description && (
-        <Text className="text-gray-700 text-sm leading-5">
-          {description}
-        </Text>
+        isHtml ? (
+          <RenderHTML
+            contentWidth={width - 64}
+            source={{ html: description }}
+            tagsStyles={{
+              body: { fontSize: 14, color: '#4B5563', lineHeight: 20 },
+              p: { marginBottom: 8 },
+              h1: { fontSize: 20, fontWeight: 'bold', marginBottom: 8 },
+              h2: { fontSize: 18, fontWeight: 'bold', marginBottom: 8 },
+              h3: { fontSize: 16, fontWeight: 'bold', marginBottom: 8 },
+              strong: { fontWeight: 'bold' },
+              em: { fontStyle: 'italic' },
+            }}
+          />
+        ) : (
+          <Text style={{ fontSize: 14, color: '#4B5563', lineHeight: 20 }}>
+            {description}
+          </Text>
+        )
       )}
     </View>
   );

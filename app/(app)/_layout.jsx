@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import CustomDrawer from '../../src/components/drawer/CustomDrawer';
 import { useDrawer } from '../../src/context/DrawerContext';
 import { useAuth } from '../../src/context/authContext';
-import { registerForPushNotifications } from '../../src/hooks/usePushNotifications';
+import { useRegisterPushToken } from '../../src/hooks/useRegisterPushToken';
 
 export default function AppLayout() {
   const { drawerOpen, openDrawer, closeDrawer } = useDrawer();
@@ -83,10 +83,8 @@ export default function AppLayout() {
           headerTitleStyle: { fontWeight: '600' },
         }}
       >
-        <Stack.Screen name="index" options={{ title: 'Moodle App' }} /> 
+<Stack.Screen name="index" options={{ title: 'Moodle App' }} /> 
         <Stack.Screen name="cursos" options={{ headerShown: false }} />
-        <Stack.Screen name="tarea" options={{ headerShown: false }} />
-        <Stack.Screen name="foro" options={{ headerShown: false }} />
       </Stack>
 
       <Modal

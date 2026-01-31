@@ -9,12 +9,14 @@ export default function Cursos() {
   const { token } = useAuth();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [offline, setOffline] = useState(false);
 
   useEffect(() => {
     async function loadCourses() {
       try {
-        const data = await getCoursesService(token);
-        setCourses(data);
+        const result = await getCoursesService(token);
+        setCourses(result.courses);
+        setOffline(result.offline);
       } catch (error) {
         console.log("Error cargando cursos", error);
       } finally {
@@ -38,26 +40,45 @@ export default function Cursos() {
   }
 
   return (
-    <FlatList
-      data={courses}
-      keyExtractor={(item) => item.id.toString()}
-      contentContainerStyle={{ padding: 16 }}
-      renderItem={({ item }) => (
-        <Pressable onPress={() => router.push({
-          pathname: `/cursos/${item.id}`,
-          params: { courseName: item.name }
-        })}>
-          <CardCurso
-            data={{
-              nombre: item.name,
-              tipo: item.category || 'Curso',
-              fechaEntrega: item.startdate || '',
-              curso: item.shortname,
-              descripcion: `Docente: ${item.teacher || 'Sin asignar'}`
-            }}
-          />
-        </Pressable>
+    <>
+      {offline && (
+        <Text
+          style={{
+            backgroundColor: '#FEF3C7',
+            color: '#92400E',
+            padding: 10,
+            textAlign: 'center',
+            margin: 16,
+            borderRadius: 6,
+            fontWeight: '600',
+          }}
+        >
+          ⚠️ Modo offline – mostrando datos guardados
+        </Text>
       )}
-    />
+      <FlatList
+        data={courses}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{ padding: 16 }}
+        renderItem={({ item }) => (
+          <Pressable 
+            onPress={() => router.push({
+              pathname: "/(app)/cursos/[courseId]",
+              params: { courseId: item.id, courseName: item.name }
+            })}
+          >
+            <CardCurso
+              data={{
+                nombre: item.name,
+                tipo: item.category || 'Curso',
+                fechaEntrega: item.startdate || '',
+                curso: item.shortname,
+                descripcion: `Docente: ${item.teacher || 'Sin asignar'}`
+              }}
+            />
+          </Pressable>
+        )}
+      />
+    </>
   );
 }
