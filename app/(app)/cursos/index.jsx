@@ -56,7 +56,6 @@ export default function Cursos() {
           ⚠️ Modo offline – mostrando datos guardados
         </Text>
       )}
-
       <FlatList
         data={courses}
         keyExtractor={(item) => item.id.toString()}

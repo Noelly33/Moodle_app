@@ -6,6 +6,7 @@ import CustomDrawer from '../../src/components/drawer/CustomDrawer';
 import { useDrawer } from '../../src/context/DrawerContext';
 import { useAuth } from '../../src/context/authContext';
 import { useRegisterPushToken } from '../../src/hooks/useRegisterPushToken';
+import { registerForPushNotifications } from '../../src/hooks/usePushNotifications';
 
 export default function AppLayout() {
   const { drawerOpen, openDrawer, closeDrawer } = useDrawer();
@@ -21,7 +22,7 @@ export default function AppLayout() {
         const pushToken = await registerForPushNotifications();
         if (!pushToken) return;
 
-        await fetch('http://192.168.100.133:3000/api/notifications/register', {
+        const response = await fetch('http://192.168.100.90:3000/api/notifications/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -33,8 +34,15 @@ export default function AppLayout() {
           }),
         });
 
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => null);
+          console.warn(`Server error: ${response.status}`, errorData);
+        } else {
+          console.log('Push token registrado exitosamente');
+        }
+
       } catch (err) {
-        console.log('Error registrando push token', err);
+        console.warn('Error registrando push token (no es crítico):', err.message);
       }
     };
 

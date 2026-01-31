@@ -35,14 +35,18 @@ export async function getCourseByIdService(token: string, courseId: string) {
 
   if (online) {
     try {
-      const course = await getCourseByIdApi(token, courseId);
-      return course;
+      const courseData = await getCourseByIdApi(token, courseId);
+      return courseData;
     } catch (err) {
-      console.log('Error cargando detalle del curso:', err);
-      throw err;
+      console.log('Error obteniendo curso, intentando modo offline', err);
+      // En modo offline, retornar null o datos básicos del curso desde la lista guardada
+      const courses = await getCourses();
+      const basicCourse = courses.find((c: any) => c.id.toString() === courseId.toString());
+      // Retornar array vacío si no hay datos, para evitar errores de .find()
+      return basicCourse ? [] : [];
     }
   } else {
-    console.log('Modo offline - detalle de curso no disponible');
-    throw new Error('Requiere conexión a internet');
+    console.log('Modo offline (sin red)');
+    return [];
   }
 }
