@@ -28,9 +28,37 @@ export default function LayoutCursos() {
       />
 
       <Stack.Screen
-        name="[id]"
+        name="[courseId]/index"
         options={{
           headerTitle: "Detalle del curso",
+        }}
+      />
+
+      <Stack.Screen
+        name="[courseId]/assign/[assignId]/index"
+        options={{
+          headerTitle: "Tarea",
+        }}
+      />
+
+      <Stack.Screen
+        name="[courseId]/forum/[forumId]/index"
+        options={{
+          headerTitle: "Foro",
+        }}
+      />
+
+      <Stack.Screen
+        name="[courseId]/forum/[forumId]/reply"
+        options={{
+          headerTitle: "Responder",
+        }}
+      />
+
+      <Stack.Screen
+        name="[courseId]/resource/[resourceId]"
+        options={{
+          headerTitle: "Recurso",
         }}
       />
     </Stack>

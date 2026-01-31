@@ -1,9 +1,11 @@
-import { View } from 'react-native'
+import { View, Pressable } from 'react-native'
 import { useEffect, useState } from 'react'
 import { router, Stack } from 'expo-router'
+import { Ionicons } from '@expo/vector-icons'
 import Button from '../../src/components/ui/Button'
 import Label from '../../src/components/form/Label'
 import ListActividad from '../../src/components/form/ListActividad'
+import { useDrawer } from '../../src/context/DrawerContext'
 
 // Datos de ejemplo
 const datosEjemplo = [
@@ -50,6 +52,7 @@ const datosEjemplo = [
 ]
 
 export default function Index() {
+  const { openDrawer } = useDrawer()
   const [selectList, setSelectList] = useState(datosEjemplo)
   const [loading, setLoading] = useState(false)
 
@@ -67,10 +70,19 @@ export default function Index() {
 
   return (
     <>
-      <Stack.Screen options={{ headerTitle: 'Mis actividades' }} />
-      <View className="bg-gray-50">
-        <Label>Actividades pendientes y en progreso</Label>
-      </View>
+      <Stack.Screen options={{ 
+        headerTitle: 'Mis Actividades',
+        headerShadowVisible: false,
+        headerStyle: { backgroundColor: '#2160C4' },
+        headerTintColor: '#fff',
+        headerTitleStyle: { fontWeight: 'normal' },
+        headerLeft: () => (
+          <Pressable onPress={openDrawer} style={{ marginLeft: 16 }}>
+            <Ionicons name="menu" size={28} color="#fff" />
+          </Pressable>
+        ),
+      }} 
+      />
       <ListActividad actividades={selectList} loading={loading} fetchActividades={fetchTareas} />
     </>
   )
