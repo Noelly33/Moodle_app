@@ -5,6 +5,8 @@ import Toast from 'react-native-toast-message';
 import { usePushListener } from '../src/hooks/usePushListener';
 import { useEffect } from 'react';
 import { initDatabase } from '../src/db/schema';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Constants from 'expo-constants';
 
 function AppShell() {
   usePushListener(); 
@@ -15,6 +17,14 @@ function AppShell() {
 }
 
 export default function RootLayout() {
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: Constants.expoConfig?.extra?.WEB_GOOGLE_CLIENT_ID,
+      offlineAccess: false,
+    });
+  }, []);
+
   return (
     <AuthProvider>
       <DrawerProvider>

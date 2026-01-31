@@ -1,6 +1,4 @@
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import Constants from 'expo-constants';
-import { useEffect } from 'react';
 
 type GoogleAuthResult = | { success: true; idToken: string } | { success: false; reason: 'cancelled' | 'error' };
 
@@ -9,12 +7,6 @@ export function useGoogleAuth(
   onCancel?: () => void,
   onError?: (error: unknown) => void
 ) {
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId: Constants.expoConfig?.extra?.WEB_GOOGLE_CLIENT_ID,
-      offlineAccess: false,
-    });
-  }, []);
 
   const signIn = async () => {
     try {
