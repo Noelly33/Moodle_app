@@ -62,14 +62,19 @@ export default function Cursos() {
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ padding: 16 }}
         renderItem={({ item }) => (
-          <Pressable onPress={() => router.push(`/cursos/${item.id}`)}>
+          <Pressable 
+            onPress={() => router.push({
+              pathname: "/(app)/cursos/[courseId]",
+              params: { courseId: item.id, courseName: item.name }
+            })}
+          >
             <CardCurso
               data={{
                 nombre: item.name,
-                tipo: item.category || "Curso",
-                fechaEntrega: item.startdate || "",
+                tipo: item.category || 'Curso',
+                fechaEntrega: item.startdate || '',
                 curso: item.shortname,
-                descripcion: `Docente: ${item.teacher || "Sin asignar"}`,
+                descripcion: `Docente: ${item.teacher || 'Sin asignar'}`
               }}
             />
           </Pressable>

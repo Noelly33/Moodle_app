@@ -13,7 +13,33 @@ export default function AppLayout() {
   const slideAnim = useRef(new Animated.Value(-320)).current; 
   const { token } = useAuth();
 
-  useRegisterPushToken(token);
+  useEffect(() => {
+    const initPush = async () => {
+      try {
+        if (!token) return;
+
+        const pushToken = await registerForPushNotifications();
+        if (!pushToken) return;
+
+        await fetch('http://192.168.100.133:3000/api/notifications/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            pushToken,
+            platform: Platform.OS,
+          }),
+        });
+
+      } catch (err) {
+        console.log('Error registrando push token', err);
+      }
+    };
+
+    initPush();
+  }, [token]);
 
   useEffect(() => {
     if (drawerOpen) {
@@ -53,10 +79,8 @@ export default function AppLayout() {
           headerTitleStyle: { fontWeight: '600' },
         }}
       >
-        <Stack.Screen name="index" options={{ title: 'Moodle App' }} /> 
+<Stack.Screen name="index" options={{ title: 'Moodle App' }} /> 
         <Stack.Screen name="cursos" options={{ headerShown: false }} />
-        <Stack.Screen name="tarea" options={{ headerShown: false }} />
-        <Stack.Screen name="foro" options={{ headerShown: false }} />
       </Stack>
 
       <Modal

@@ -1,15 +1,27 @@
-// components/CardActividad.js
 import { View, Text, Pressable } from 'react-native';
 import { router } from 'expo-router';
 import Bagde from './Bagde';
 
-const CardActividad = ({ data, onDelete }) => {
-    // Badge solo se muestra para tareas pendientes (no entregadas)
+const badgeColors = {
+  forum: { bg: '#EDE9FE', text: '#7C3AED' },      // Violeta
+  assign: { bg: '#FEE2E2', text: '#DC2626' },     // Rojo
+  quiz: { bg: '#FEF3C7', text: '#D97706' },       // Amarillo/Naranja
+  resource: { bg: '#DBEAFE', text: '#2563EB' },   // Azul
+  label: { bg: '#D1FAE5', text: '#059669' },      // Verde
+  default: { bg: '#F3F4F6', text: '#6B7280' }     // Gris
+};
+
+const getBadgeColor = (tipo) => {
+  return badgeColors[tipo?.toLowerCase()] || badgeColors.default;
+};
+
+const CardActividad = ({ data, onDelete, onPress }) => {
     const isPendiente = data?.estado === 'pendiente';
     const badgeText = 'Pendiente';
     const borderColor = '#3B82F6';
+    const badgeColor = getBadgeColor(data?.tipo);
 
-    return (
+    const CardContent = (
         <View 
             style={{ 
                 borderWidth: 1, 
@@ -53,13 +65,13 @@ const CardActividad = ({ data, onDelete }) => {
                 {/* Código y fecha */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
                     <View style={{ 
-                        backgroundColor: '#DBEAFE', 
+                        backgroundColor: badgeColor.bg, 
                         paddingHorizontal: 8, 
                         paddingVertical: 4, 
                         borderRadius: 4,
                         marginRight: 8
                     }}>
-                        <Text style={{ color: '#1E40AF', fontWeight: '600', fontSize: 12 }}>
+                        <Text style={{ color: badgeColor.text, fontWeight: '600', fontSize: 12 }}>
                             {data?.tipo?.toUpperCase() || 'TAREA'}
                         </Text>
                     </View>
@@ -79,6 +91,14 @@ const CardActividad = ({ data, onDelete }) => {
                 </Text>
             </View>
         </View>
+    );
+
+    return onPress ? (
+        <Pressable onPress={onPress}>
+            {CardContent}
+        </Pressable>
+    ) : (
+        CardContent
     );
 };
 
