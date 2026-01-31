@@ -15,9 +15,12 @@ export default function DrawerMenuItem({
 
   return (
     <View>
-      <Pressable onPress={onPress} style={styles.menuItem}>
-        {item.icon && ( <Ionicons name={item.icon} size={20} color="#ffffff" style={styles.icon}/>)}
-        <Text style={styles.label}>{item.label}</Text>
+      <Pressable 
+        onPress={onPress} 
+        style={({ pressed }) => [styles.menuItem, pressed && styles.menuItemPressed]}
+      >
+        {item.icon && ( <Ionicons name={item.icon} size={20} color={({ pressed }) => pressed ? "#2C3E50" : "#5A5C5E"} style={styles.icon}/>)}
+        <Text style={({ pressed }) => [styles.label, pressed && styles.labelPressed]}>{item.label}</Text>
 
         {hasSubMenu && (
           <Animated.View
@@ -69,13 +72,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 14,
     paddingHorizontal: 20,
-    backgroundColor: '#1e293b', 
+    backgroundColor: '#ffffff',
+    marginHorizontal: 8,
+    marginVertical: 4,
+    borderRadius: 20,
+  },
+  menuItemPressed: {
+    backgroundColor: 'rgba(129, 182, 235, 0.4)',
   },
   icon: {
     marginRight: 12,
   },
   label: {
-    color: '#ffffff',
+    color: '#5A5C5E',
     fontSize: 16,
     fontWeight: '600',
   },

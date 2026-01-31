@@ -49,4 +49,3 @@ export default function CardInfoCurso({ title, description, isHtml = false }) {
     </View>
   );
 }
-

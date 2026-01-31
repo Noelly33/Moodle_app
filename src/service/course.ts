@@ -1,6 +1,6 @@
 import { isOnline } from '../hooks/useOffline';
 import { saveCourses, getCourses } from '../repository/courses.repository';
-import { getCoursesApi } from '../api/course.api';
+import { getCoursesApi, getCourseByIdApi } from '../api/course.api';
 
 export async function getCoursesService(token: string) {
   const online = await isOnline();

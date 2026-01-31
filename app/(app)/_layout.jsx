@@ -42,7 +42,7 @@ export default function AppLayout() {
         }
 
       } catch (err) {
-        console.log('Error registrando push token', err);
+        console.warn('Error registrando push token (no es crítico):', err.message);
       }
     };
 
@@ -79,12 +79,12 @@ export default function AppLayout() {
               hitSlop={12}
               style={{ marginLeft: 16 }}
             >
-              <Ionicons name="menu" size={28} color="#1F2937" />
+              <Ionicons name="menu" size={28} color="#fff" />
             </TouchableOpacity>
           ),
-          headerStyle: { backgroundColor: '#FFFFFF' },
-          headerTintColor: '#1F2937',
-          headerTitleStyle: { fontWeight: 'bold' },
+          headerStyle: { backgroundColor: '#2160C4' },
+          headerTintColor: '#fff',
+          headerTitleStyle: { fontWeight: '600' },
         }}
       >
 <Stack.Screen name="index" options={{ title: 'Moodle App' }} /> 
