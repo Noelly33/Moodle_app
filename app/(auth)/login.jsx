@@ -33,7 +33,7 @@ export default function Login() {
       await saveSession(token);
       router.push('/(app)');
     } catch (error) {
-      alert('No se pudo iniciar sesión. Intenta nuevamente.');
+      alert('No se pudo iniciar sesión. Intenta nuevamente.', error);
     } finally {
       setLoading(false);
     }

@@ -44,13 +44,13 @@ export default function Cursos() {
       {offline && (
         <Text
           style={{
-            backgroundColor: '#FEF3C7',
-            color: '#92400E',
+            backgroundColor: "#FEF3C7",
+            color: "#92400E",
             padding: 10,
-            textAlign: 'center',
+            textAlign: "center",
             margin: 16,
             borderRadius: 6,
-            fontWeight: '600',
+            fontWeight: "600",
           }}
         >
           ⚠️ Modo offline – mostrando datos guardados

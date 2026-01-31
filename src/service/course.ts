@@ -50,4 +50,3 @@ export async function getCourseByIdService(token: string, courseId: string) {
     return [];
   }
 }
-
