@@ -28,6 +28,7 @@ export default function CursoDetalle() {
       } catch (err) {
         console.error("Error cargando curso:", err);
         setError(err.message);
+        setCourse([]);
       } finally {
         setLoading(false);
       }
@@ -44,13 +45,13 @@ export default function CursoDetalle() {
     );
   }
 
-  if (!course || error) {
+  if (error || !course || course.length === 0) {
     return (
       <>
         <Stack.Screen options={{ headerTitle: courseName || "Error" }} />
         <View className="flex-1 justify-center items-center p-4">
           <Text className="text-red-500 text-center">
-            {error || "Error al cargar el curso"}
+            {error || "No hay datos disponibles para este curso"}
           </Text>
         </View>
       </>
