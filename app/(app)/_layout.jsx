@@ -5,7 +5,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import CustomDrawer from '../../src/components/drawer/CustomDrawer';
 import { useDrawer } from '../../src/context/DrawerContext';
 import { useAuth } from '../../src/context/authContext';
-import { useRegisterPushToken } from '../../src/hooks/useRegisterPushToken';
 import { registerForPushNotifications } from '../../src/hooks/usePushNotifications';
 
 export default function AppLayout() {
@@ -21,26 +20,6 @@ export default function AppLayout() {
 
         const pushToken = await registerForPushNotifications();
         if (!pushToken) return;
-
-        const response = await fetch('http://192.168.100.90:3000/api/notifications/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            pushToken,
-            platform: Platform.OS,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => null);
-          console.warn(`Server error: ${response.status}`, errorData);
-        } else {
-          console.log('Push token registrado exitosamente');
-        }
-
       } catch (err) {
         console.warn('Error registrando push token (no es crítico):', err.message);
       }
