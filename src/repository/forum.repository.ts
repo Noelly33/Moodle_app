@@ -4,8 +4,7 @@ export async function saveForums(forums: any[]) {
   for (const forum of forums) {
     await db.runAsync(
       `
-      INSERT OR REPLACE INTO forums (id, courseId, name, intro)
-      VALUES (?, ?, ?, ?)
+      INSERT OR REPLACE INTO forums (id, courseId, name, intro) VALUES (?, ?, ?, ?)
       `,
       [
         forum.id,
@@ -32,8 +31,7 @@ export async function saveDiscussions(discussions: any[]) {
   for (const discussion of discussions) {
     await db.runAsync(
       `
-      INSERT OR REPLACE INTO discussions (id, forumId, name, userName, createdAt)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT OR REPLACE INTO discussions (id, forumId, name, userName, createdAt) VALUES (?, ?, ?, ?, ?)
       `,
       [
         discussion.id,
@@ -61,15 +59,15 @@ export async function savePosts(posts: any[]) {
   for (const post of posts) {
     await db.runAsync(
       `
-      INSERT OR REPLACE INTO posts (id, discussionId, message, userName, createdAt)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT OR REPLACE INTO posts (id, discussionId, message, userName, createdAt, parentId) VALUES (?, ?, ?, ?, ?, ?)
       `,
       [
         post.id,
-        post.discussionId,
+        post.discussionid,
         post.message,
-        post.userName || '',
-        post.createdAt || ''
+        post.author?.fullname || '',
+        post.timecreated,
+        post.parentid
       ]
     );
   }
