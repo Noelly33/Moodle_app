@@ -1,41 +1,37 @@
-import { View, Text, ScrollView, ActivityIndicator, FlatList } from "react-native";
+import { View, Text, ActivityIndicator, FlatList } from "react-native";
 import { useLocalSearchParams, Stack, router } from "expo-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../../../../src/context/authContext";
 import ForumPostCard from "../../../../../../src/components/ui/ForumPostCard";
+import { getDiscussionService } from "../../../../../../src/service/forum";
 
 export default function ForumDetail() {
-  const { courseId, forumId, forumName } = useLocalSearchParams();
+  const params = useLocalSearchParams();
+  const { courseId, forumId, forumName } = params;
   const { token } = useAuth();
-  const [posts, setPosts] = useState([]);
+
+  const [discussions, setDiscussions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    
-
-    const mockPosts = [
-      {
-        id: 1,
-        title: "Bienvenida al curso",
-        author: "Profesor",
-        date: "2026-01-25",
-        replies: 5,
-        lastReply: "2026-01-28"
-      },
-      {
-        id: 2,
-        title: "Duda sobre el tema 1",
-        author: "María García",
-        date: "2026-01-27",
-        replies: 3,
-        lastReply: "2026-01-29"
-      }
-    ];
-    
-    setTimeout(() => {
-      setPosts(mockPosts);
+    if (!forumId || !token) {
       setLoading(false);
-    }, 500);
+      return;
+    }
+
+    const loadDiscussions = async () => {
+      try {
+        const data = await getDiscussionService(Number(forumId), token);
+        setDiscussions(data || []);
+      } catch (e) {
+        console.error("Error cargando discusiones", e);
+        setDiscussions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDiscussions();
   }, [forumId, token]);
 
   if (loading) {
@@ -48,54 +44,48 @@ export default function ForumDetail() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          headerTitle: forumName || "Foro",
-        }}
-      />
-      <View className="flex-1 bg-white">
-        {posts.length > 0 ? (
-          <FlatList
-            data={posts}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={{ padding: 16 }}
-            renderItem={({ item }) => (
-              <ForumPostCard
-                title={item.title}
-                author={item.author}
-                date={item.date}
-                replies={item.replies}
-                lastReply={item.lastReply}
-                onPress={() => router.push({
-                  pathname: `/(app)/cursos/[courseId]/forum/[forumId]/reply`,
-                  params: {
-                    courseId: courseId,
-                    forumId: forumId,
-                    postId: item.id,
-                    postTitle: item.title
-                  }
-                })}
-                onReplyPress={() => router.push({
-                  pathname: `/(app)/cursos/[courseId]/forum/[forumId]/reply`,
-                  params: {
-                    courseId: courseId,
-                    forumId: forumId,
-                    postId: item.id,
-                    postTitle: item.title
-                  }
-                })}
-              />
-            )}
+      <Stack.Screen options={{ headerTitle: forumName || "Foro" }} />
+
+      <FlatList
+        data={discussions}
+        keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{ padding: 16 }}
+        renderItem={({ item }) => (
+          <ForumPostCard
+            title={item.subject}
+            author={item.userfullname}
+            date={new Date(item.created * 1000).toLocaleDateString()}
+            replies={item.numreplies}
+            onPress={() =>
+              router.push({
+                pathname: `/(app)/cursos/[courseId]/forum/[forumId]/reply`,
+                params: {
+                  courseId,
+                  forumId,
+                  discussionId: item.id,
+                  discussionTitle: item.subject,
+                },
+              })
+            }
+            onReplyPress={() =>
+              router.push({
+                pathname: `/(app)/cursos/[courseId]/forum/[forumId]/reply`,
+                params: {
+                  courseId,
+                  forumId,
+                  discussionId: item.id,
+                  discussionTitle: item.subject,
+                },
+              })
+            }
           />
-        ) : (
-          <View className="flex-1 justify-center items-center p-4">
-            <Text className="text-gray-500 text-center">
-              No hay discusiones en este foro
-            </Text>
-          </View>
         )}
-      </View>
+        ListEmptyComponent={
+          <Text className="text-center text-gray-500">
+            No hay discusiones en este foro
+          </Text>
+        }
+      />
     </>
   );
 }
-

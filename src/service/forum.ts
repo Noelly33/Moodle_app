@@ -16,7 +16,8 @@ export async function getDiscussionService(
   }
 
   const response = await getForumDiscussionsApi(forumId, token);
-  return response.discussions;
+  console.log(response);
+ return response?.discussions?.discussions ?? [];
 }
 
 export async function getReadMessageService(
