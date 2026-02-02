@@ -16,18 +16,8 @@ export async function getDiscussionService(
   }
 
   const response = await getForumDiscussionsApi(forumId, token);
+  console.log(response);
  return response?.discussions?.discussions ?? [];
-}
-
-export async function getForumInfo(forumId: number, token: string) {
-  const online = await isOnline();
-
-  if (!online) {
-    throw new Error('Sin conexión');
-  }
-
-  const response = await getForumDiscussionsApi(forumId, token);
-  return response?.forum ?? response?.forums ?? null;
 }
 
 export async function getReadMessageService(
