@@ -13,15 +13,17 @@ export async function initDatabase() {
       id INTEGER PRIMARY KEY,
       courseId INTEGER NOT NULL,
       name TEXT NOT NULL,
-      intro TEXT
+      intro TEXT,
+      numDiscussions INTEGER
     );
 
     CREATE TABLE IF NOT EXISTS discussions (
       id INTEGER PRIMARY KEY,
       forumId INTEGER NOT NULL,
-      name TEXT NOT NULL,
+      subject TEXT NOT NULL,
       userName TEXT,
-      createdAt TEXT
+      createdAt INTEGER,
+      numReplies INTEGER
     );
 
     CREATE TABLE IF NOT EXISTS posts (
@@ -29,7 +31,8 @@ export async function initDatabase() {
       discussionId INTEGER NOT NULL,
       message TEXT NOT NULL,
       userName TEXT,
-      createdAt TEXT
+      createdAt INTEGER,
+      parentId INTEGER
     );
   `);
 }

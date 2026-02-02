@@ -68,7 +68,6 @@ export default function CursoDetalle() {
   );
 
   const handleActividadPress = (module) => {
-    
     switch (module.type || module.activityType) {
       case "assign":
         router.push({
@@ -83,14 +82,15 @@ export default function CursoDetalle() {
 
       case "forum":
         router.push({
-          pathname: `/(app)/cursos/[courseId]/forum/[forumId]`,
-          params: { 
-            courseId: courseId,
-            forumId: module.id,
-            forumName: module.name 
+          pathname: "/(app)/cursos/[courseId]/forum/[forumId]",
+          params: {
+            courseId,
+            forumId: module.instance,
+            forumName: module.name
           }
         });
         break;
+
 
       case "resource":
         router.push({

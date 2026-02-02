@@ -22,17 +22,6 @@ export default function CustomDrawer({ onNavigate }) {
   };
 
   const handleLogout = async () => {
-    try {
-      await fetch('http://192.168.100.133:3000/api/notifications/logout-push', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    } catch (e) {
-      console.log('No se pudo enviar push de logout', e);
-    }
-
     if (onNavigate) onNavigate();
     await googleLogout();
     await signOut();
