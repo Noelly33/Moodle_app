@@ -12,7 +12,7 @@ export default function CustomDrawer({ onNavigate }) {
   const menu = menuItems;
   const loading = false;
   const router = useRouter();
-  const { signOut, token } = useAuth();
+  const { signOut } = useAuth();
 
   const handleNavigation = (route) => {
     if (route) {
