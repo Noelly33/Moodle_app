@@ -115,9 +115,3 @@ Error relacionado con Java / JDK
  - Confirme que el archivo android/local.properties exista
 
  - Revise que la ruta del SDK sea correcta
-
- Error relacionado con Typescript
-
- Ejecute:
-
-  - 

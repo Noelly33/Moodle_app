@@ -32,8 +32,6 @@ export default function ReplyForum() {
   const [sending, setSending] = useState(false);
   const [forumDueDate, setForumDueDate] = useState(0);
 
-  /* ---------------- Utils ---------------- */
-
   const formatDueDate = (ts) => {
     if (!ts) return null;
     const d = new Date(ts * 1000);
@@ -66,8 +64,6 @@ export default function ReplyForum() {
     return depth;
   };
 
-  /* ---------------- Data ---------------- */
-
   const loadPosts = async () => {
     if (!discussionId || !token) return;
 
@@ -88,7 +84,7 @@ export default function ReplyForum() {
             : info?.duedate;
           setForumDueDate(duedate || 0);
         } catch {
-          /* silencioso */
+
         }
       }
     } catch (e) {
@@ -101,8 +97,6 @@ export default function ReplyForum() {
   useEffect(() => {
     loadPosts();
   }, [discussionId, token]);
-
-  /* ---------------- Actions ---------------- */
 
   const handleSend = async () => {
     if (!message.trim()) {
@@ -147,8 +141,6 @@ export default function ReplyForum() {
       setSending(false);
     }
   };
-
-  /* ---------------- UI ---------------- */
 
   if (loading) {
     return <ActivityIndicator size="large" />;
