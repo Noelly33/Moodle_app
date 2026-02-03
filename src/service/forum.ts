@@ -20,6 +20,19 @@ export async function getDiscussionService(
  return response?.discussions?.discussions ?? [];
 }
 
+export async function getForumInfo(forumId: number, token: string) {
+  const online = await isOnline();
+
+  if (!online) {
+    throw new Error('Sin conexión');
+  }
+
+  const response = await getForumDiscussionsApi(forumId, token);
+  console.log(response);
+  // Intentamos devolver información del foro si existe en la respuesta
+  return response?.forum ?? response?.forums ?? null;
+}
+
 export async function getReadMessageService(
   discussionId: number,
   token: string

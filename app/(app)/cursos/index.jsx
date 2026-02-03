@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { router } from "expo-router";
 import { useAuth } from "../../../src/context/authContext";
 import { getCoursesService } from "../../../src/service/course";
+import Feather from '@expo/vector-icons/Feather';
 import CardCurso from "../../../src/components/ui/CardCurso";
 
 export default function Cursos() {
@@ -53,7 +54,7 @@ export default function Cursos() {
             fontWeight: "600",
           }}
         >
-          ⚠️ Modo offline – mostrando datos guardados
+          <Feather name="alert-triangle" size={24} color="black" /> Modo offline – mostrando datos guardados
         </Text>
       )}
       <FlatList
