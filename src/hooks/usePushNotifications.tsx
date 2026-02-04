@@ -3,15 +3,14 @@ import * as Device from 'expo-device';
 import { Platform } from 'react-native';
 
 export async function registerForPushNotifications() {
+
   if (!Device.isDevice) {
-    alert('Debe ejecutarse en un dispositivo físico');
     return null;
   }
 
-  const permission =  await Notifications.requestPermissionsAsync();
+  const permission = await Notifications.requestPermissionsAsync();
 
   if (permission.status !== 'granted') {
-    alert('Permiso de notificaciones denegado');
     return null;
   }
 
@@ -23,6 +22,5 @@ export async function registerForPushNotifications() {
       importance: Notifications.AndroidImportance.MAX,
     });
   }
-
   return token;
 }
