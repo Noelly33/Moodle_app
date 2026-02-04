@@ -95,8 +95,6 @@ Ejecute los siguiente comandos:
 
  - npm install
 
- - cual es el comando para crear al carpeta .expo?
-
  - npx expo run:android
 
 Esto compilará la aplicación y la instalará directamente en su dispositivo Android. 
