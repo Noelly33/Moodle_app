@@ -34,5 +34,18 @@ export async function initDatabase() {
       createdAt INTEGER,
       parentId INTEGER
     );
+
+    CREATE TABLE IF NOT EXISTS activities (
+      id INTEGER PRIMARY KEY,
+      courseId INTEGER NOT NULL,
+      activityId INTEGER,
+      name TEXT NOT NULL,
+      type TEXT NOT NULL,
+      descripcion TEXT,
+      duedate INTEGER,
+      estado TEXT,
+      curso TEXT,
+      sectionName TEXT
+    );
   `);
 }
