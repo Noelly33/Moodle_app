@@ -20,79 +20,60 @@ import {
 
 export default function ReplyForum() {
   const [alert, setAlert] = useState(null);
-  const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
+  const [isForumExpired, setIsForumExpired] = useState(false);
 
-  const { discussionId, discussionTitle, forumId } = useLocalSearchParams();
+  const { discussionId, discussionTitle, forumId, courseId } =
+    useLocalSearchParams();
   const { token } = useAuth();
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
-  const [forumDueDate, setForumDueDate] = useState(0);
 
-  /* ---------------- Utils ---------------- */
+  
+  const stripHtml = (html) =>
+    html?.replace(/<[^>]+>/g, "").trim();
 
-  const formatDueDate = (ts) => {
-    if (!ts) return null;
-    const d = new Date(ts * 1000);
-    return `${d.toLocaleDateString("es-ES", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    })}, ${d.toLocaleTimeString("es-ES", {
-      hour: "2-digit",
-      minute: "2-digit",
-    })}`;
+
+  const buildPostTree = (posts) => {
+    const map = {};
+    const roots = [];
+
+    posts.forEach((p) => {
+      map[p.id] = { ...p, children: [] };
+    });
+
+    posts.forEach((p) => {
+      if (p.parentid && map[p.parentid]) {
+        map[p.parentid].children.push(map[p.id]);
+      } else {
+        roots.push(map[p.id]); // post inicial
+      }
+    });
+
+    return roots;
   };
-
-  const idMap = Object.fromEntries(posts.map((p) => [p.id, p]));
-
-  const getDepth = (post) => {
-    let depth = 0;
-    let current = post;
-
-    while (
-      current?.parentid &&
-      current.parentid !== posts[0]?.id &&
-      idMap[current.parentid]
-    ) {
-      depth += 1;
-      current = idMap[current.parentid];
-    }
-
-    return depth;
-  };
-
-  /* ---------------- Data ---------------- */
 
   const loadPosts = async () => {
     if (!discussionId || !token) return;
+    setLoading(true);
 
     try {
-      const data = await getReadMessageService(
-        Number(discussionId),
-        token
-      );
-
+      const data = await getReadMessageService(Number(discussionId), token);
       data.sort((a, b) => a.timecreated - b.timecreated);
       setPosts(data);
 
       if (forumId) {
-        try {
-          const info = await getForumInfo(Number(forumId), token);
-          const duedate = Array.isArray(info)
-            ? info[0]?.duedate
-            : info?.duedate;
-          setForumDueDate(duedate || 0);
-        } catch {
-          /* silencioso */
-        }
+        const info = await getForumInfo(Number(forumId), token);
+        const duedate = Array.isArray(info) ? info[0]?.duedate : info?.duedate;
+        const now = Math.floor(Date.now() / 1000);
+        setIsForumExpired(duedate > 0 && now > duedate);
       }
     } catch (e) {
       console.error("Error cargando mensajes", e);
+      setPosts([]);
     } finally {
       setLoading(false);
     }
@@ -102,57 +83,117 @@ export default function ReplyForum() {
     loadPosts();
   }, [discussionId, token]);
 
-  /* ---------------- Actions ---------------- */
-
   const handleSend = async () => {
     if (!message.trim()) {
       setAlert({ type: "error", message: "Escribe algo antes de publicar" });
       return;
     }
 
-    if (!posts.length) {
-      setAlert({ type: "error", message: "No se encontró el post principal" });
-      return;
-    }
-
     try {
       setSending(true);
 
-      const parentId = replyTo ? replyTo.id : posts[0].id;
+      const parentId = replyTo?.id ?? posts[0]?.id;
 
       await postParticipationService(
         parentId,
         `<p>${message}</p>`,
+        Number(courseId),
         token
       );
 
       setMessage("");
       setReplyTo(null);
-      setShowReplyBox(false);
-
-      setAlert({
-        type: "success",
-        message: "Respuesta publicada correctamente",
-      });
-
-      setTimeout(() => setAlert(null), 3000);
+      setAlert({ type: "success", message: "Respuesta publicada" });
 
       await loadPosts();
     } catch (e) {
-      setAlert({
-        type: "error",
-        message: "No se pudo publicar el mensaje", e
-      });
+      console.error(e);
+      setAlert({ type: "error", message: "No se pudo publicar" });
     } finally {
       setSending(false);
     }
   };
 
-  /* ---------------- UI ---------------- */
+  const renderPost = (post, depth = 0) => {
+    const isRoot = !post.parentid;
 
-  if (loading) {
-    return <ActivityIndicator size="large" />;
-  }
+    return (
+      <View key={post.id}>
+        <View
+          style={{
+            marginLeft: depth * 16,
+            borderWidth: isRoot ? 2 : 1,
+            borderColor: isRoot ? "#000" : "#d1d5db",
+          }}
+          className="mb-3 p-3 rounded-lg bg-white"
+        >
+          <Text className="font-semibold">
+            {post.author?.fullname ?? "Usuario"}
+          </Text>
+
+          <Text className="text-xs text-gray-500 mb-1">
+            {new Date(post.timecreated * 1000).toLocaleString()}
+          </Text>
+
+          <Text className="text-gray-800">
+            {stripHtml(post.message)}
+          </Text>
+
+          {!isForumExpired && (
+            <Pressable onPress={() => setReplyTo(post)}>
+              <Text className="text-blue-600 text-xs mt-2 font-semibold">
+                Responder
+              </Text>
+            </Pressable>
+          )}
+
+          {replyTo?.id === post.id && (
+            <View className="mt-3 bg-gray-100 rounded-lg p-3">
+              <TextInput
+                placeholder="Escribe tu respuesta..."
+                value={message}
+                onChangeText={setMessage}
+                multiline
+                className="border border-gray-300 rounded-lg px-3 py-2 bg-white mb-3"
+              />
+
+              <View className="flex-row justify-end gap-2">
+                <Pressable
+                  onPress={() => {
+                    setMessage("");
+                    setReplyTo(null);
+                  }}
+                  className="px-4 py-2 bg-gray-300 rounded-lg"
+                >
+                  <Text>Cancelar</Text>
+                </Pressable>
+
+                <Pressable
+                  onPress={handleSend}
+                  disabled={sending}
+                  className={`px-4 py-2 rounded-lg ${
+                    sending ? "bg-gray-400" : "bg-blue-600"
+                  }`}
+                >
+                  <Text className="text-white font-semibold">
+                    {sending ? "Publicando..." : "Publicar"}
+                  </Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
+        </View>
+
+        {post.children.map((child) =>
+          renderPost(child, depth + 1)
+        )}
+      </View>
+    );
+  };
+
+  if (loading) return <ActivityIndicator size="large" />;
+
+  const tree = buildPostTree(posts);
 
   return (
     <>
@@ -163,116 +204,17 @@ export default function ReplyForum() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={90}
       >
-        <View style={{ flex: 1 }}>
-          {/* ALERT */}
+        <ScrollView className="p-4" contentContainerStyle={{ paddingBottom: 120 }}>
           {alert && (
-            <View className="px-4 pt-2">
-              <Dialog
-                type={alert.type}
-                message={alert.message}
-                onClose={() => setAlert(null)}
-              />
-            </View>
+            <Dialog
+              type={alert.type}
+              message={alert.message}
+              onClose={() => setAlert(null)}
+            />
           )}
 
-          {/* FECHA LÍMITE */}
-          {forumDueDate > 0 && (
-            <Text className="px-4 pb-2 text-sm text-gray-600">
-              Fecha límite: {formatDueDate(forumDueDate)}
-            </Text>
-          )}
-
-          {/* MENSAJES */}
-          <ScrollView
-            className="p-4"
-            contentContainerStyle={{ paddingBottom: 180 }}
-            keyboardShouldPersistTaps="handled"
-          >
-            {posts.length === 0 ? (
-              <Text className="text-center text-gray-500 mt-8">
-                Aún no hay respuestas. Sé el primero en participar 💬
-              </Text>
-            ) : (
-              posts.map((post) => {
-                const depth = getDepth(post);
-                const isReply =
-                  post.parentid && post.parentid !== posts[0]?.id;
-
-                return (
-                  <View
-                    key={post.id}
-                    style={{ marginLeft: depth * 12 }}
-                    className={`mb-4 p-3 rounded-lg border ${
-                      isReply
-                        ? "border-gray-300 bg-white"
-                        : "border-gray-200 bg-gray-100"
-                    }`}
-                  >
-                    <Text className="font-semibold">
-                      {post.author?.fullname ?? "Usuario"}
-                    </Text>
-
-                    <Text className="text-xs text-gray-500 mb-1">
-                      {new Date(post.timecreated * 1000).toLocaleString()}
-                    </Text>
-
-                    <Text className="text-gray-700">
-                      {post.message?.replaceAll(/<[^>]+>/g, "").trim()}
-                    </Text>
-
-                    <Pressable
-                      onPress={() => {
-                        setReplyTo(post);
-                        setShowReplyBox(true);
-                      }}
-                    >
-                      <Text className="text-blue-600 text-xs mt-2 font-semibold">
-                        Responder
-                      </Text>
-                    </Pressable>
-
-                    {showReplyBox && replyTo?.id === post.id && (
-                      <View className="mt-3 bg-gray-100 rounded-xl p-3">
-                        <TextInput
-                          placeholder="Escribe tu respuesta..."
-                          value={message}
-                          onChangeText={setMessage}
-                          multiline
-                          className="border border-gray-300 rounded-lg px-3 py-2 bg-white mb-3"
-                        />
-
-                        <View className="flex-row justify-end gap-2">
-                          <Pressable
-                            onPress={() => {
-                              setMessage("");
-                              setReplyTo(null);
-                              setShowReplyBox(false);
-                            }}
-                            className="px-4 py-2 bg-gray-300 rounded-lg"
-                          >
-                            <Text>Cancelar</Text>
-                          </Pressable>
-
-                          <Pressable
-                            onPress={handleSend}
-                            disabled={sending}
-                            className={`px-4 py-2 rounded-lg ${
-                              sending ? "bg-gray-400" : "bg-blue-600"
-                            }`}
-                          >
-                            <Text className="text-white font-semibold">
-                              {sending ? "Publicando..." : "Publicar"}
-                            </Text>
-                          </Pressable>
-                        </View>
-                      </View>
-                    )}
-                  </View>
-                );
-              })
-            )}
-          </ScrollView>
-        </View>
+          {tree.map((post) => renderPost(post))}
+        </ScrollView>
       </KeyboardAvoidingView>
     </>
   );

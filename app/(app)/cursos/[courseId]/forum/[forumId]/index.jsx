@@ -62,7 +62,7 @@ export default function ForumDetail() {
                 params: {
                   courseId,
                   forumId,
-                  discussionId: item.id,
+                  discussionId: item.discussion,
                   discussionTitle: item.subject,
                 },
               })
@@ -73,7 +73,7 @@ export default function ForumDetail() {
                 params: {
                   courseId,
                   forumId,
-                  discussionId: item.id,
+                  discussionId: item.discussion,
                   discussionTitle: item.subject,
                 },
               })

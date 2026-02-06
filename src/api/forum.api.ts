@@ -56,7 +56,8 @@ export async function getDiscussionPostsApi(
 export async function postPublishParticipationApi(
   postId: number,
   message: string,
-  token: string
+  courseId: number,
+  token: string,
 ) {
   const response = await fetch(`${BASE_URL}/forums/reply`, {
     method: 'POST',
@@ -67,11 +68,13 @@ export async function postPublishParticipationApi(
     body: JSON.stringify({
       postId,
       message,
+      courseId, 
     }),
   });
 
   if (!response.ok) {
-    throw new Error('Error backend');
+    const err = await response.json();
+    throw new Error(err.message || 'Error backend');
   }
 
   return response.json();
