@@ -41,13 +41,14 @@ export async function getReadMessageService(
   }
 
   const response = await getDiscussionPostsApi(discussionId, token);
-  return response.posts;
+  return response?.posts ?? response?.discussions ?? response ?? [];
 }
 
 export async function postParticipationService(
   postId: number,
   message: string,
-  token: string
+  courseId: number,
+  token: string,
 ) {
   const online = await isOnline();
 
@@ -58,8 +59,9 @@ export async function postParticipationService(
   const response = await postPublishParticipationApi(
     postId,
     message,
+    courseId,
     token
   );
 
-  return response.reply;
+  return response?.reply ?? response;
 }
