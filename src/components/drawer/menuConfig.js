@@ -11,21 +11,10 @@ export const menuItems = [
     route: "/cursos",
     subMenu: [],
   },
-
-  // {
-  //   label: "Actividades",
-  //   icon: "list-outline",
-  //   route: null,
-  //   subMenu: [
-  //     { label: "Tareas", route: "/tarea" },
-  //     { label: "Foros", route: "/foro" },
-  //   ],
-  // },
-
   {
-    label: "Ajustes",
+    label: "Perfil",
     icon: "settings-outline",
-    route: "/ajustes",
+    route: "/perfil",
     subMenu: [],
   },
 ];
