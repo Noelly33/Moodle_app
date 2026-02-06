@@ -2,7 +2,7 @@ import { FlatList, View, Text } from 'react-native'
 import { RefreshControl } from 'react-native'
 import CardActividad from '../ui/CardActividad'
 
-export default function ListActividad({actividades, loading, fetchActividades}) {
+export default function ListActividad({actividades, loading, fetchActividades, onActivityPress}) {
     
     return (
         <View className="flex-1 bg-gray-50">
@@ -10,7 +10,12 @@ export default function ListActividad({actividades, loading, fetchActividades}) 
                 <FlatList
                     refreshControl={<RefreshControl refreshing={loading} onRefresh={fetchActividades} />}
                     data={actividades}
-                    renderItem={({item}) => <CardActividad data={item} />}
+                    renderItem={({item}) => (
+                        <CardActividad 
+                            data={item} 
+                            onPress={onActivityPress ? () => onActivityPress(item) : undefined}
+                        />
+                    )}
                     keyExtractor={(item) => item.id?.toString()}
                     contentContainerStyle={{ paddingHorizontal: 12, paddingVertical: 8 }}
                 />
