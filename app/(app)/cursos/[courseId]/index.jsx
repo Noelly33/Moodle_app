@@ -1,13 +1,15 @@
-import { View, Text, ScrollView, ActivityIndicator, useWindowDimensions } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator, useWindowDimensions, Pressable } from "react-native";
 import { useLocalSearchParams, Stack, router } from "expo-router";
 import { useEffect, useState } from "react";
 import RenderHTML from "react-native-render-html";
 import Feather from '@expo/vector-icons/Feather';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Accordion from "../../../../src/components/ui/Accordion";
 import CardInfoCurso from "../../../../src/components/ui/CardInfoCurso";
 import CardActividad from "../../../../src/components/ui/CardActividad";
 import { useAuth } from "../../../../src/context/authContext";
 import { getCourseByIdService } from "../../../../src/service/course";
+import { getResourcesByCourseService } from "../../../../src/service/resource";
 
 export default function CursoDetalle() {
   const { courseId, courseName } = useLocalSearchParams();
@@ -17,6 +19,7 @@ export default function CursoDetalle() {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [resources, setResources] = useState([]);
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
@@ -35,6 +38,21 @@ export default function CursoDetalle() {
     };
 
     fetchCourseDetail();
+  }, [courseId, token]);
+
+  useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        if (!token || !courseId) return;
+        const data = await getResourcesByCourseService(Number(courseId), token);
+        setResources(data || []);
+      } catch (err) {
+        console.error("Error cargando recursos:", err);
+        setResources([]);
+      }
+    };
+
+    fetchResources();
   }, [courseId, token]);
 
   if (loading) {
@@ -65,6 +83,11 @@ export default function CursoDetalle() {
 
   const units = course.filter(
     (s) => s.title?.toLowerCase() !== "general"
+  );
+
+  // Filtrar solo PDFs de los recursos
+  const pdfResources = resources.filter(r => 
+    r.files?.some(f => f.mimetype?.includes('pdf'))
   );
 
   const handleActividadPress = (module) => {

@@ -9,6 +9,19 @@ export async function initDatabase() {
       teacher TEXT
     );
 
+    CREATE TABLE IF NOT EXISTS activities (
+      id INTEGER PRIMARY KEY,
+      courseId INTEGER NOT NULL,
+      activityId INTEGER,
+      name TEXT NOT NULL,
+      type TEXT NOT NULL,
+      descripcion TEXT,
+      duedate INTEGER,
+      estado TEXT,
+      curso TEXT,
+      sectionName TEXT
+    );
+
     CREATE TABLE IF NOT EXISTS forums (
       id INTEGER PRIMARY KEY,
       courseId INTEGER NOT NULL,

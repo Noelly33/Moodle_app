@@ -16,6 +16,7 @@ export async function getDiscussionService(
   }
 
   const response = await getForumDiscussionsApi(forumId, token);
+  console.log(response);
  return response?.discussions?.discussions ?? [];
 }
 
@@ -27,6 +28,8 @@ export async function getForumInfo(forumId: number, token: string) {
   }
 
   const response = await getForumDiscussionsApi(forumId, token);
+  console.log(response);
+  // Intentamos devolver información del foro si existe en la respuesta
   return response?.forum ?? response?.forums ?? null;
 }
 
