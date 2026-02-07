@@ -11,12 +11,38 @@ export async function submitTaskTextApi(token: string, taskId: string, text: str
         body: JSON.stringify({ taskId, text }),
     });
 
+    let responseBody;
+    try {
+        responseBody = await response.json();
+    } catch (err) {
+        const text = await response.text();
+        throw new Error(`Error inesperado del servidor: ${text}`, err);
+    }
+
+    if (!response.ok) {
+        throw new Error(responseBody?.message || 'Error al enviar tarea de texto');
+    }
+
+    return responseBody;
+}
+
+/*export async function submitTaskTextApi(token: string, taskId: string, text: string) {
+    const response = await fetch(`${BASE_URL}/tasks/submit-text`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ taskId, text }),
+    });
+    console.log(response);
+
     if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || 'Error al enviar tarea de texto');
     }
     return await response.json();
-}
+}*/
 
 export async function submitTaskFileApi(token: string, taskId: string, fileUri: string, fileName: string) {
     const formData = new FormData();
