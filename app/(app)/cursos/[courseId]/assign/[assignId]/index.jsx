@@ -76,6 +76,7 @@ export default function AssignDetail() {
       Alert.alert("Éxito", "Texto enviado correctamente.");
       setOnlineText("");
     } catch (error) {
+      console.log(error);
       Alert.alert("Error", error.message);
     } finally {
       setIsSubmitting(false);
