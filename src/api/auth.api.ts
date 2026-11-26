@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.100.133:3000/api/auth/';
+const BASE_URL = 'http://192.168.100.90:3000/api/auth/';
 
 export async function loginWithGoogleApi(idToken: string) {
   const response = await fetch( `${BASE_URL}login/google`,{

@@ -29,8 +29,7 @@ const getModuleColor = (modname) => {
   const colors = {
     forum: "#8B5CF6",
     assign: "#EF4444",
-    quiz: "#F59E0B",
-    resource: "#3B82F6",
+    resource: "#10B981",
     label: "#10B981",
   };
   return colors[modname] || "#6B7280";
@@ -103,7 +102,14 @@ export default function CursoDetalle() {
         break;
 
       case "resource":
-        router.push(`/[resourceid]/${module.id}`);
+        router.push({
+          pathname: `/(app)/cursos/[courseId]/resource/[resourceId]`,
+          params: {
+            courseId: courseid,
+            resourceId: module.id,
+            resourceName: module.name
+          }
+        });
         break;
 
       default:

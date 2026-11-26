@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.100.133:3000/api/resources';
+const BASE_URL = 'http://192.168.100.90:3000/api/resources';
 
 
 export async function getCourseResourcesApi(

@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.100.133:3000/api/forum';
+const BASE_URL = 'http://192.168.100.90:3000/api/forum';
 
 export async function getForumsApi(token: string, courseIds: number[]) {
   const params = courseIds.map(id => `courseIds=${id}`).join('&');

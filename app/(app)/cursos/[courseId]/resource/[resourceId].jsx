@@ -8,7 +8,7 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { getResourcesService } from "../../../../../src/service/resource";
 
-const API_URL = "http://192.168.100.133:3000/api";
+const API_URL = "http://192.168.100.90:3000/api";
 
 export default function ResourceDetail() {
   const { courseId, resourceId, resourceName } = useLocalSearchParams();

@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.100.133:3000/api';
+const BASE_URL = 'http://192.168.100.90:3000/api';
 
 export async function getActivitiesByCoursesApi(courseIds, token) {
   const query = courseIds

@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.100.133:3000/api/notifications/';
+const BASE_URL = 'http://192.168.100.90:3000/api/notifications/';
 
 export async function registerPushTokenApi(token: string, pushToken: string, platform: string) {
 

@@ -32,15 +32,11 @@ export default function ReplyForum() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
 
-  /* =========================
-     UTILIDADES
-  ========================= */
+  
   const stripHtml = (html) =>
     html?.replace(/<[^>]+>/g, "").trim();
 
-  /* =========================
-     CONSTRUIR ÁRBOL
-  ========================= */
+
   const buildPostTree = (posts) => {
     const map = {};
     const roots = [];
@@ -60,9 +56,6 @@ export default function ReplyForum() {
     return roots;
   };
 
-  /* =========================
-     CARGA DE POSTS
-  ========================= */
   const loadPosts = async () => {
     if (!discussionId || !token) return;
     setLoading(true);
@@ -90,9 +83,6 @@ export default function ReplyForum() {
     loadPosts();
   }, [discussionId, token]);
 
-  /* =========================
-     PUBLICAR RESPUESTA
-  ========================= */
   const handleSend = async () => {
     if (!message.trim()) {
       setAlert({ type: "error", message: "Escribe algo antes de publicar" });
@@ -124,9 +114,6 @@ export default function ReplyForum() {
     }
   };
 
-  /* =========================
-     RENDER RECURSIVO
-  ========================= */
   const renderPost = (post, depth = 0) => {
     const isRoot = !post.parentid;
 

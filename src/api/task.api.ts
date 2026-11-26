@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.100.133:3000/api';
+const BASE_URL = 'http://192.168.100.90:3000/api';
 
 
 export async function submitTaskTextApi(token: string, taskId: string, text: string) {
