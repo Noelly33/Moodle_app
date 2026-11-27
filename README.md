@@ -74,6 +74,63 @@ Edite el archivo app.json y agregue los siguientes valores dentro de expo.extra:
     "ANDROID_GOOGLE_CLIENT_ID": "tu_android_client_id"
     }
 
+URL del backend: copie `.env.example` a `.env` y ponga la IP de su PC en la red local
+(`ipconfig`), no `localhost`, para que el celular llegue al backend:
+
+    EXPO_PUBLIC_API_URL=http://192.168.x.x:3000/api
+
+Después de cambiarla, reinicie `npx expo start`.
+
+# Arquitectura
+
+La app está organizada **por funcionalidad** (features). Cada feature tiene sus propias capas:
+
+    app/                      Solo rutas de expo-router. Cada archivo re-exporta una pantalla de src/features.
+    src/
+      core/                   Infraestructura, sin pantallas
+        config/env.ts         URL del backend (EXPO_PUBLIC_API_URL)
+        http/apiClient.ts     Cliente HTTP único: URL base, token, errores (ApiError), 401 → cierra sesión
+        http/authSession.ts   Token en memoria compartido entre la sesión y el cliente HTTP
+        db/                   SQLite (respaldo offline): conexión y esquema
+        network/isOnline.ts   Estado de la red
+        offline/offlineFirst  Lectura con respaldo local (con red → backend y guarda; sin red → local)
+        storage/cache.ts      Caché clave/valor (AsyncStorage)
+      features/
+        auth/                 Login con Google, AuthProvider (sesión)
+        activities/           Inicio: actividades de todos los cursos
+        courses/              Lista y detalle de cursos
+        assignments/          Detalle y entrega de tareas
+        forum/                Foros, discusiones y respuestas
+        resources/            Recursos y descarga de archivos
+        notifications/        Push: registro del token y listeners
+        profile/              Perfil
+      shared/                 Lo que usan varias features
+        components/ui         Botones, tarjetas, estados (carga/error/vacío/offline), HTML
+        components/drawer     Menú lateral
+        hooks/useAsync.ts     Hook genérico de carga (data / loading / error / reload)
+        navigation/routes.ts  Navegación centralizada (routes.course(), routes.assignment(), ...)
+        utils/, theme/        Formato de fechas/tamaños, limpieza de HTML, colores
+
+Dentro de cada feature:
+
+| Archivo | Responsabilidad |
+|---|---|
+| `api.ts` | Llamadas HTTP al backend (usa `core/http/apiClient`). Nada de lógica. |
+| `repository.ts` | Lectura/escritura en SQLite (solo si la feature funciona offline). |
+| `service.ts` | Reglas de negocio: validaciones, offline, mapeo de datos. |
+| `hooks/` | Conectan el servicio con React (estado de carga, recarga, acciones). |
+| `components/` | Componentes visuales propios de la feature. |
+| `screens/` | Pantallas. Solo UI: usan hooks, no llaman a la API directamente. |
+| `types.ts` | Tipos de los datos de la feature. |
+
+Reglas:
+
+- Las pantallas no hacen `fetch` ni consultas SQL: usan un hook de su feature.
+- Para navegar se usa `routes` de `shared/navigation/routes.ts`, no rutas escritas a mano.
+- Importaciones entre carpetas con el alias `@/` (`@/shared/...`, `@/features/...`).
+- Una feature puede usar `core` y `shared`; si necesita algo de otra feature, que sea su `service` o sus `hooks`.
+- Nueva pantalla: crear la pantalla en `src/features/<feature>/screens/` y un archivo de una línea en `app/` que la re-exporte.
+
 # Configuración de Android SDK
 
 Dentro de la carpeta android, cree el archivo local.properties y agregue la ruta de su SDK:
