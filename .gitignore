@@ -45,3 +45,6 @@ google-services.json
 eas.json
 
 proyecto-movil-f912e-firebase-adminsdk-fbsvc-fc5971943f.json
+
+.env
+.env.local
