@@ -1,14 +1,7 @@
 import { Redirect } from 'expo-router';
-import { useAuth } from '../src/context/authContext';
+import { useAuth } from '@/features/auth/context/AuthProvider';
 
 export default function Index() {
-  const { token, loading } = useAuth();
-
-  if (loading) return null;
-
-  if (!token) {
-    return <Redirect href="/(auth)/login" />;
-  }
-
-  return <Redirect href="/(app)" />;
+  const { token } = useAuth();
+  return <Redirect href={token ? '/(app)' : '/(auth)/login'} />;
 }
